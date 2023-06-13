@@ -7,10 +7,10 @@
 
 
 class DoubleEndedQueue:
-    def __init__(self, m):
-        self.queue = [None] * m
-        self.max_n = m
-        self.head = 0
+    def __init__(self, max_n):
+        self.queue = [None] * max_n
+        self.max_n = max_n
+        self.head = 1
         self.tail = 0
         self.size = 0
 
@@ -21,26 +21,26 @@ class DoubleEndedQueue:
     # Добавление в конец очереди
     def push_back(self, x):
         if self.size < self.max_n:
-            self.queue[self.tail] = x
             self.tail = (self.tail + 1) % self.max_n
+            self.queue[self.tail] = x
             self.size += 1
         else:
-            raise OverflowError
+            raise IndexError("Queue is full")
 
     # Добавление в начала очереди
     def push_front(self, x):
         if self.size < self.max_n:
-            self.queue[self.head - 1] = x
             self.head = (self.head - 1) % self.max_n
+            self.queue[self.head] = x
             self.size += 1
         else:
-            raise OverflowError
+            raise IndexError("Queue is full")
 
     # Извлечение из конца очереди
     def pop_back(self):
         if self.is_empty():
-            raise IndexError
-        x = self.queue[self.tail - 1]
+            raise IndexError("Queue is empty")
+        x = self.queue[self.tail]
         # self.queue[self.tail] = None
         self.tail = (self.tail - 1) % self.max_n
         self.size -= 1
@@ -49,7 +49,7 @@ class DoubleEndedQueue:
     # Извлечение из начала очереди
     def pop_front(self):
         if self.is_empty():
-            raise IndexError
+            raise IndexError("Queue is empty")
         x = self.queue[self.head]
         # self.queue[self.head] = None
         self.head = (self.head + 1) % self.max_n
@@ -64,20 +64,14 @@ if __name__ == '__main__':
     count_commands = int(input())
     max_size = int(input())
     queue = DoubleEndedQueue(max_size)
-    commands = {
-        'pop_front': queue.pop_front,
-        'pop_back': queue.pop_back,
-        'push_back': queue.push_back,
-        'push_front': queue.push_front,
-    }
     for i in range(count_commands):
         command = input()
         operation, *value = command.split()
         try:
-            result = commands[operation](*map(int, value))
+            result = getattr(queue, operation)(*value)
             if result is not None:
                 print(result)
-        except:
+        except IndexError:
             print('error')
 
         # if value:

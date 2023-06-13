@@ -1,4 +1,4 @@
-# ID 88142512
+# ID 88166944
 import operator
 
 
@@ -12,30 +12,29 @@ OPERATORS = {
 
 class Stack:
     def __init__(self):
-        self.elements = []
+        self.__elements = []
 
     def push(self, item):
-        self.elements.append(item)
+        self.__elements.append(item)
 
     def pop(self):
-        return self.elements.pop()
+        if len(self.__elements) == 0:
+            raise IndexError("Stack is empty")
+        return self.__elements.pop()
 
-    def size(self):
-        return len(self.elements)
+
+def main(stack, elements, convertor=int):
+    for element in elements:
+        if element in OPERATORS:
+            right, left = stack.pop(), stack.pop()
+            stack.push(OPERATORS[element](left, right))
+        else:
+            stack.push(convertor(element))
+
+    print(stack.pop())
 
 
 if __name__ == '__main__':
     stack = Stack()
     elements = input().split()
-    for element in elements:
-        if element.lstrip('-').isdigit():
-            stack.push(int(element))
-        else:
-            if stack.size() < 2:
-                raise IndexError
-            else:
-                number1 = stack.pop()
-                number2 = stack.pop()
-                stack.push(OPERATORS[element](number2, number1))
-
-    print(stack.pop())
+    main(stack, elements)
