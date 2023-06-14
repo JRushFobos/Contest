@@ -6,10 +6,11 @@
 # pop_back() – вывести последний элемент дека и удалить его
 
 
+# ID 88200060
 class DoubleEndedQueue:
-    def __init__(self, max_n):
-        self.queue = [None] * max_n
-        self.max_n = max_n
+    def __init__(self, max_deq_size):
+        self.queue = [None] * max_deq_size
+        self.max_deq_size = max_deq_size
         self.head = 1
         self.tail = 0
         self.size = 0
@@ -19,70 +20,60 @@ class DoubleEndedQueue:
         return self.size == 0
 
     # Добавление в конец очереди
-    def push_back(self, x):
-        if self.size < self.max_n:
-            self.tail = (self.tail + 1) % self.max_n
-            self.queue[self.tail] = x
-            self.size += 1
-        else:
+    def push_back(self, token):
+        if self.size >= self.max_deq_size:
             raise IndexError("Queue is full")
+        else:
+            self.tail = (self.tail + 1) % self.max_deq_size
+            self.queue[self.tail] = token
+            self.size += 1
 
     # Добавление в начала очереди
-    def push_front(self, x):
-        if self.size < self.max_n:
-            self.head = (self.head - 1) % self.max_n
-            self.queue[self.head] = x
-            self.size += 1
-        else:
+    def push_front(self, token):
+        if self.size >= self.max_deq_size:
             raise IndexError("Queue is full")
+        else:
+            self.head = (self.head - 1) % self.max_deq_size
+            self.queue[self.head] = token
+            self.size += 1
 
     # Извлечение из конца очереди
     def pop_back(self):
         if self.is_empty():
             raise IndexError("Queue is empty")
-        x = self.queue[self.tail]
+        token = self.queue[self.tail]
         # self.queue[self.tail] = None
-        self.tail = (self.tail - 1) % self.max_n
+        self.tail = (self.tail - 1) % self.max_deq_size
         self.size -= 1
-        return x
+        return token
 
     # Извлечение из начала очереди
     def pop_front(self):
         if self.is_empty():
             raise IndexError("Queue is empty")
-        x = self.queue[self.head]
+        token = self.queue[self.head]
         # self.queue[self.head] = None
-        self.head = (self.head + 1) % self.max_n
+        self.head = (self.head + 1) % self.max_deq_size
         self.size -= 1
-        return x
-
-    # def print_queue(self):
-    #     return self.queue
+        return token
 
 
 if __name__ == '__main__':
     count_commands = int(input())
     max_size = int(input())
     queue = DoubleEndedQueue(max_size)
-    for i in range(count_commands):
+    for _ in range(count_commands):
         command = input()
         operation, *value = command.split()
         try:
             result = getattr(queue, operation)(*value)
             if result is not None:
                 print(result)
+        except AttributeError:
+            print('error')
         except IndexError:
             print('error')
 
-        # if value:
-        #     try:
-        #         result = commands[operation](int(value[0]))
-        #     except:
-        #         print('error')
-        # else:
-        #     result = commands[operation]()
-        # if result is not None:
-        #     print(result)
 # Тест №1
 # queue = DoubleEndedQueue(4)
 # queue.push_front(861)

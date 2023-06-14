@@ -1,4 +1,4 @@
-# ID 88166944
+# ID 88202472
 import operator
 
 
@@ -18,23 +18,27 @@ class Stack:
         self.__elements.append(item)
 
     def pop(self):
-        if len(self.__elements) == 0:
+        try:
+            return self.__elements.pop()
+        except IndexError:
             raise IndexError("Stack is empty")
-        return self.__elements.pop()
 
 
-def main(stack, elements, convertor=int):
+def main(elements, convertor=int, operators=OPERATORS):
+    stack = Stack()
     for element in elements:
-        if element in OPERATORS:
+        if element in operators:
             right, left = stack.pop(), stack.pop()
-            stack.push(OPERATORS[element](left, right))
+            stack.push(operators[element](left, right))
         else:
-            stack.push(convertor(element))
+            try:
+                stack.push(convertor(element))
+            except TypeError:
+                print('Incorrect type element')
 
-    print(stack.pop())
+    return stack.pop()
 
 
 if __name__ == '__main__':
-    stack = Stack()
     elements = input().split()
-    main(stack, elements)
+    print(main(elements))
