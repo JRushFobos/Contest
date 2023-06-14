@@ -1,4 +1,4 @@
-# ID 88202472
+# ID 88211646
 import operator
 
 
@@ -24,7 +24,7 @@ class Stack:
             raise IndexError("Stack is empty")
 
 
-def main(elements, convertor=int, operators=OPERATORS):
+def calculator(elements, convertor=int, operators=OPERATORS):
     stack = Stack()
     for element in elements:
         if element in operators:
@@ -34,11 +34,11 @@ def main(elements, convertor=int, operators=OPERATORS):
             try:
                 stack.push(convertor(element))
             except TypeError:
-                print('Incorrect type element')
+                return TypeError('Incorrect type element')
 
     return stack.pop()
 
 
 if __name__ == '__main__':
     elements = input().split()
-    print(main(elements))
+    print(calculator(elements))
