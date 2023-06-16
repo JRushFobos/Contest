@@ -33,8 +33,8 @@ def calculator(elements, convertor=int, operators=OPERATORS):
         else:
             try:
                 stack.push(convertor(element))
-            except TypeError:
-                return TypeError('Incorrect type element')
+            except ValueError:
+                return ValueError('Incorrect type element')
 
     return stack.pop()
 
