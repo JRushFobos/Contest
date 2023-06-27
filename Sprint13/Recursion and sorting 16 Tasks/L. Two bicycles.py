@@ -1,3 +1,4 @@
+# Два велосипеда
 def binarySearch(money, price, left, right):
     if right <= left:  # промежуток пуст
         return -1
